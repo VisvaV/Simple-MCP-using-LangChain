@@ -1,12 +1,11 @@
-from flask import Flask, request, jsonify
+from mcp.server.fastmcp import FastMCP
 
-app = Flask(__name__)
+mcp = FastMCP("LangChainMCPServer")
 
-@app.route("/tool", methods=["POST"])
-def tool():
-    data = request.json
-    query = data.get("query", "")
-    return jsonify({"result": f"Tool executed successfully for query: {query}"})
+@mcp.tool()
+def process_query(query: str) -> str:
+    """Processes the query and returns a response."""
+    return f"Tool executed successfully for query: {query}"
 
 if __name__ == "__main__":
-    app.run(port=5001)
+    mcp.run(transport="stdio")
